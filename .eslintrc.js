@@ -5,6 +5,7 @@ module.exports = {
   ],
   rules: {
     // React
+    'react/jsx-filename-extension': [1, { extensions: ['.jsx'] }],
     'react/prop-types': 0,
     'react/self-closing-comp': 0,
     'react/display-name': 0,
