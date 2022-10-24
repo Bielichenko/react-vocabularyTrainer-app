@@ -1,0 +1,54 @@
+.translationBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px;
+
+  background-color: rgb(238, 255, 0);
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px 1px rgb(63, 63, 57);
+
+  &__wordAndAnswer {
+    margin-bottom: 20px;
+
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  &__word {
+    margin-right: 10px;
+  }
+
+  &__answer {
+    color: red;
+  }
+
+  &__inputContainer {
+    margin-bottom: 10px;
+  }
+
+  &__input {
+    font-size: 15px;
+  }
+
+  &__buttonSection {
+    display: flex;
+    justify-content: space-evenly;
+
+    width: 100%;
+  }
+
+  &__button {
+    padding: 5px;
+
+    &--check {
+      background-color: greenyellow;
+    }
+
+    &--open {
+      background-color: rgb(250, 137, 8);
+    }
+  }
+}
