@@ -1,3 +1,7 @@
+@import './components/CounterComponent/CounterComponent.scss';
+@import './components/ImageComponent/ImageComponent.scss';
+@import './components/TranslationBlockComponent/TranslationBlockComponent.scss';
+
 .app {
   display: flex;
   flex-direction: column;
@@ -5,9 +9,6 @@
   align-items: center;
 
   height: 100vh;
-
-  font-weight: bold;
-  font-size: 20px;
 
   background-color: rgb(0, 255, 208);
 
@@ -20,85 +21,5 @@
 
     top: 60%;
     right: 30%;
-  }
-}
-
-.counter {
-  font-size: 50px;
-}
-
-.imgContainer {
-  height: 60%;
-  width: 30%;
-
-  padding: 10px;
-
-  background-color: rgb(238, 255, 0);
-  border-radius: 10%;
-  box-shadow: 5px 5px 10px 1px rgb(63, 63, 57);
-
-  &__image {
-    height: 100%;
-    width: 100%;
-
-    border-radius: 10%;
-  }
-}
-
-.mainSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  &__transalationBlock {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 15px;
-
-    background-color: rgb(238, 255, 0);
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px 1px rgb(63, 63, 57);
-  }
-
-  &__wordAndAnswer {
-    margin-bottom: 20px;
-  }
-
-  &__word {
-    margin-right: 10px;
-  }
-
-  &__answer {
-    color: red;
-  }
-
-  &__inputContainer {
-    margin-bottom: 10px;
-  }
-
-  &__input {
-    font-size: 15px;
-  }
-
-  &__buttonSection {
-    display: flex;
-    justify-content: space-evenly;
-
-    width: 100%;
-  }
-
-  &__button {
-    padding: 5px;
-
-    &--check {
-      background-color: greenyellow;
-    }
-
-    &--open {
-      background-color: rgb(250, 137, 8);
-    }
   }
 }
