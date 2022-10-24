@@ -1,14 +1,16 @@
-/* eslint-disable no-console */
+import { imageSlice } from './store/imageReducer';
 
 const url = 'https://dog.ceo/api/breeds/image/random';
 
-export async function fetchImage(setImage) {
+export const fetchImage = () => async (dispatch) => {
   try {
+    dispatch(imageSlice.actions.imageFetching());
+
     const res = await fetch(url);
     const data = await res.json();
 
-    setImage(data);
-  } catch (error) {
-    console.log(error);
+    dispatch(imageSlice.actions.imageFetchingSuccess(data));
+  } catch (e) {
+    dispatch(imageSlice.actions.imageFetchingError(e.message));
   }
-}
+};

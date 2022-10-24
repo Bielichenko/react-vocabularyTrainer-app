@@ -14,6 +14,17 @@
   &__imgContainer {
     margin-bottom: 30px;
   }
+
+  &__counter {
+    position: absolute;
+
+    top: 60%;
+    right: 30%;
+  }
+}
+
+.counter {
+  font-size: 50px;
 }
 
 .imgContainer {
@@ -22,7 +33,7 @@
 
   padding: 10px;
 
-  background-color:  rgb(238, 255, 0);
+  background-color: rgb(238, 255, 0);
   border-radius: 10%;
   box-shadow: 5px 5px 10px 1px rgb(63, 63, 57);
 
@@ -45,7 +56,6 @@
     flex-direction: column;
     align-items: center;
 
-    margin-right: 50px;
     padding: 15px;
 
     background-color: rgb(238, 255, 0);
@@ -90,15 +100,5 @@
     &--open {
       background-color: rgb(250, 137, 8);
     }
-  }
-
-  &__counterContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    width: 100px;
-
-    font-size: 50px;
   }
 }

@@ -1,7 +1,4 @@
-/* eslint-disable global-require */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { counterSlice } from './store/counterReducer';
 import { inputSlice } from './store/inputReducer';
@@ -10,6 +7,7 @@ import { words } from './words';
 import { fetchImage } from './api';
 
 import './App.scss';
+import { imageSlice } from './store/imageReducer';
 
 function getRandomWord() {
   const randomIndex = Math.round(Math.random() * words.length);
@@ -32,18 +30,19 @@ export const App = () => {
   const { counter } = useSelector(state => state.counterReducer);
   const { userInput } = useSelector(state => state.inputReducer);
   const { isAnswerOpen } = useSelector(state => state.openAnswerReducer);
+  const { image } = useSelector(state => state.imageReducer);
+
   const { increment__counter } = counterSlice.actions;
   const { drop__counter } = counterSlice.actions;
   const { set__userInput } = inputSlice.actions;
   const { drop__userInput } = inputSlice.actions;
   const { show__answer } = openAnswerSlice.actions;
   const { hide__answer } = openAnswerSlice.actions;
+  const { hide__image } = imageSlice.actions;
 
   const wordsContainer = randomWord;
   const wordToTranslate = makeFirstCapitalLetter(wordsContainer[0]);
   const rightAnswer = makeFirstCapitalLetter(wordsContainer[1]);
-
-  const [image, setImage] = useState(undefined);
 
   const setUserInput = (currInput) => {
     dispatch(set__userInput(currInput));
@@ -55,8 +54,8 @@ export const App = () => {
   };
 
   const setImageFromServer = () => {
-    if (counter !== 0 && (counter + 1) % 5 === 0) {
-      fetchImage(setImage);
+    if ((counter + 1) % 5 === 0) {
+      dispatch(fetchImage());
     }
   };
 
@@ -74,7 +73,7 @@ export const App = () => {
   const showAnswer = () => {
     dispatch(show__answer());
     dispatch(drop__counter());
-    setImage(undefined);
+    dispatch(hide__image());
   };
 
   const checkСorrectedInput = () => {
@@ -91,8 +90,18 @@ export const App = () => {
     <div className="app">
 
       {
-        !image
+        image
           ? (
+            <div className="app__imgContainer imgContainer">
+              <img
+                className="app__image imgContainer__image"
+                src={image.message}
+                alt="dogImg"
+              />
+            </div>
+
+          )
+          : (
             <div className="app__imgContainer imgContainer">
               <img
                 className="app__image imgContainer__image"
@@ -101,19 +110,49 @@ export const App = () => {
               />
             </div>
           )
-          : (
-            <div className="app__imgContainer imgContainer">
-              <img
-                className="app__image imgContainer__image"
-                src={image.message}
-                alt="dogImg"
-              />
+      }
+      <div className="app__counter counter">
+        {counter}
+      </div>
+      {
+        isAnswerOpen
+          ? (
+            <div className="app__mainSection mainSection">
+              <div className="mainSection__transalationBlock">
+                <div className="mainSection__wordAndAnswer">
+                  <span className="mainSection__word">
+                    {wordToTranslate}
+                  </span>
+                  <span className="mainSection__answer">
+                    {rightAnswer}
+                  </span>
+                </div>
+                <div className="mainSection__inputContainer">
+                  <input
+                    className="mainSection__input"
+                    type="text"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyUp={(e) => {
+                      if (e.key === 'Enter') {
+                        checkСorrectedInput();
+                      }
+                    }}
+                  />
+                </div>
+                <div className="mainSection__buttonSection">
+                  <button
+                    className="mainSection__button mainSection__button--check"
+                    type="button"
+                    onClick={() => checkСorrectedInput()}
+                  >
+                    Got it!
+                  </button>
+                </div>
+              </div>
             </div>
           )
-      }
-      {
-        !isAnswerOpen
-          ? (
+          : (
             <div className="app__mainSection mainSection">
               <div className="mainSection__transalationBlock">
                 <div className="mainSection__wordAndAnswer">
@@ -150,48 +189,6 @@ export const App = () => {
                     I don&apos;t know
                   </button>
                 </div>
-              </div>
-              <div className="mainSection__counterContainer">
-                {counter}
-              </div>
-            </div>
-          )
-          : (
-            <div className="app__mainSection mainSection">
-              <div className="mainSection__transalationBlock">
-                <div className="mainSection__wordAndAnswer">
-                  <span className="mainSection__word">
-                    {wordToTranslate}
-                  </span>
-                  <span className="mainSection__answer">
-                    {rightAnswer}
-                  </span>
-                </div>
-                <div className="mainSection__inputContainer">
-                  <input
-                    className="mainSection__input"
-                    type="text"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    onKeyUp={(e) => {
-                      if (e.key === 'Enter') {
-                        checkСorrectedInput();
-                      }
-                    }}
-                  />
-                </div>
-                <div className="mainSection__buttonSection">
-                  <button
-                    className="mainSection__button mainSection__button--check"
-                    type="button"
-                    onClick={() => checkСorrectedInput()}
-                  >
-                    Got it!
-                  </button>
-                </div>
-              </div>
-              <div className="mainSection__counterContainer">
-                {counter}
               </div>
             </div>
           )
