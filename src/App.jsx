@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isAppStartedSlice } from './store/isAppStartedReducer';
-import { WordsStorageComponent } from './components/StatisticsComponent/StatisticsComponent';
+import { StatisticsComponent } from './components/StatisticsComponent/StatisticsComponent';
 import { ImageComponent } from './components/ImageComponent/ImageComponent';
 import { CounterComponent } from './components/CounterComponent/CounterComponent';
 import { TranslationBlockComponent } from './components/TranslationBlockComponent/TranslationBlockComponent';
@@ -27,7 +27,7 @@ export const App = () => {
         ? <StartAppComponent />
         : (
           <>
-            <WordsStorageComponent />
+            <StatisticsComponent />
             <ImageComponent />
             <CounterComponent />
             <TranslationBlockComponent />
