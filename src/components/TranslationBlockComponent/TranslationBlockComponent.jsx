@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { counterSlice } from '../../store/counterReducer';
 import { imageSlice } from '../../store/imageReducer';
 import { inputSlice } from '../../store/inputReducer';
+import { isAppStartedSlice } from '../../store/isAppStartedReducer';
 import { openAnswerSlice } from '../../store/openAnswerReducer';
+import { wordsRemainSlice } from '../../store/wordsRemainReducer';
 import { fetchImage } from '../../utils/apiAction';
 
-import { getRandomWord, makeFirstCapitalLetter, wordNormalize } from '../../utils/functions';
+import {
+  countWordsRemain,
+  getRandomWord,
+  makeFirstCapitalLetter,
+  wordNormalize,
+} from '../../utils/functions';
 
-let randomWord = getRandomWord();
+let externalWordObject = getRandomWord();
 
 export const TranslationBlockComponent = () => {
   const dispatch = useDispatch();
@@ -19,13 +26,30 @@ export const TranslationBlockComponent = () => {
   const { drop__userInput } = inputSlice.actions;
   const { increment__counter } = counterSlice.actions;
   const { drop__counter } = counterSlice.actions;
+  const { set__bestScore } = counterSlice.actions;
   const { show__answer } = openAnswerSlice.actions;
   const { hide__answer } = openAnswerSlice.actions;
   const { hide__image } = imageSlice.actions;
+  const { set__wordsRemain } = wordsRemainSlice.actions;
+  const { set__initialWord } = isAppStartedSlice.actions;
 
-  const wordsContainer = randomWord;
-  const wordToTranslate = makeFirstCapitalLetter(wordsContainer[0]);
-  const rightAnswer = makeFirstCapitalLetter(wordsContainer[1]);
+  useEffect(() => {
+    const wordsRemain = JSON.parse(localStorage.getItem('wordsRemain'));
+
+    dispatch(set__initialWord());
+    dispatch(set__wordsRemain(wordsRemain));
+    externalWordObject = getRandomWord();
+  }, []);
+
+  let wordObject;
+  let wordToTranslate;
+  let rightAnswer;
+
+  if (externalWordObject) {
+    wordObject = externalWordObject;
+    wordToTranslate = makeFirstCapitalLetter(wordObject.translatedWord);
+    rightAnswer = makeFirstCapitalLetter(wordObject.translation);
+  }
 
   const setUserInput = (currInput) => {
     dispatch(set__userInput(currInput));
@@ -38,8 +62,38 @@ export const TranslationBlockComponent = () => {
   };
 
   const setNewWord = () => {
-    randomWord = getRandomWord();
+    externalWordObject = getRandomWord();
     dispatch(drop__userInput());
+  };
+
+  const setRemainWords = (words) => {
+    const notLearnedWordsNumber = countWordsRemain(words);
+
+    localStorage.setItem('wordsRemain', JSON.stringify(notLearnedWordsNumber));
+    dispatch(set__wordsRemain(notLearnedWordsNumber));
+  };
+
+  const saveLearnedWords = () => {
+    const prevWords = JSON.parse(localStorage.getItem('wordsStorage'));
+    const updatedWords = prevWords.map(wordObj => {
+      const updatedWordObj = { ...wordObj, learned: true };
+
+      return wordNormalize(wordObj.translation) === wordNormalize(userInput)
+        ? updatedWordObj
+        : wordObj;
+    });
+
+    localStorage.setItem('wordsStorage', JSON.stringify(updatedWords));
+    setRemainWords(updatedWords);
+  };
+
+  const setNewBestScore = () => {
+    const prevBestScore = JSON.parse(localStorage.getItem('bestScore'));
+    const newPotentialBestScore = counter + 1;
+    const bestScore = Math.max(prevBestScore, newPotentialBestScore);
+
+    localStorage.setItem('bestScore', JSON.stringify(bestScore));
+    dispatch(set__bestScore(bestScore));
   };
 
   const checkUserInput = () => {
@@ -50,6 +104,8 @@ export const TranslationBlockComponent = () => {
       setImageFromServer();
       dispatch(increment__counter());
       setNewWord();
+      saveLearnedWords();
+      setNewBestScore();
     }
   };
 

@@ -1,6 +1,8 @@
 @import './components/CounterComponent/CounterComponent.scss';
 @import './components/ImageComponent/ImageComponent.scss';
 @import './components/TranslationBlockComponent/TranslationBlockComponent.scss';
+@import './components/StartAppComponent/StartAppComponent.scss';
+@import './components/StatisticsComponent/StatisticsComponent.scss';
 
 .app {
   display: flex;
@@ -11,6 +13,12 @@
   height: 100vh;
 
   background-color: rgb(0, 255, 208);
+
+  &__statistics {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
   &__imgContainer {
     margin-bottom: 30px;

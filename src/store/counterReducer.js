@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   counter: 0,
+  bestScore: 0,
 };
 
 export const counterSlice = createSlice({
@@ -15,6 +16,9 @@ export const counterSlice = createSlice({
     },
     drop__counter(state) {
       state.counter = 0;
+    },
+    set__bestScore(state, action) {
+      state.bestScore = action.payload;
     },
   },
 });
